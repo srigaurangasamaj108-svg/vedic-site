@@ -1,0 +1,27 @@
+---
+import "../assets/reading.css";
+
+const { title, subtitle } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+  </head>
+
+  <body>
+    <main class="reading-container">
+      <header class="reading-header">
+        <h1>{title}</h1>
+        <p class="subtitle">{subtitle}</p>
+      </header>
+
+      <article class="reading-body">
+        <slot />
+      </article>
+    </main>
+  </body>
+</html>

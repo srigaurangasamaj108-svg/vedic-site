@@ -1,0 +1,69 @@
+---
+import ReadingLayout from "../../../layouts/ReadingLayout.astro";
+import VerseNavigation from "../../../components/VerseNavigation.astro";
+
+// REQUIRED: getStaticPaths must load data internally
+export async function getStaticPaths() {
+  const entries = Object.values(
+    import.meta.glob("../../../content/gita/**/verse-*.md", {
+      eager: true,
+    })
+  );
+
+  return entries.map((entry) => ({
+    params: {
+      chapter: entry.frontmatter.chapter.toString(),
+      verse: entry.frontmatter.verse.toString(),
+    },
+  }));
+}
+
+// Load all entries AGAIN for rendering
+const allEntries = Object.values(
+  import.meta.glob("../../../content/gita/**/verse-*.md", {
+    eager: true,
+  })
+);
+
+// Read URL params
+const { chapter, verse } = Astro.params;
+
+// Find matching verse
+const entry = allEntries.find(
+  (e) =>
+    e.frontmatter.chapter.toString() === chapter &&
+    e.frontmatter.verse.toString() === verse
+);
+
+if (!entry) {
+  throw new Error("Verse not found");
+}
+
+const { Content, frontmatter } = entry;
+const { book, title } = frontmatter;
+
+// Navigation logic
+const chapterNum = Number(chapter);
+const verseNum = Number(verse);
+
+const prev =
+  verseNum > 1
+    ? {
+        label: `Verse ${chapterNum}.${verseNum - 1}`,
+        link: `/gita/${chapterNum}/${verseNum - 1}`,
+      }
+    : null;
+
+const next = {
+  label: `Verse ${chapterNum}.${verseNum + 1}`,
+  link: `/gita/${chapterNum}/${verseNum + 1}`,
+};
+---
+
+<ReadingLayout
+  title={title}
+  subtitle={`${book} · Chapter ${chapter} · Verse ${verse}`}
+>
+  <Content />
+  <VerseNavigation prev={prev} next={next} />
+</ReadingLayout>

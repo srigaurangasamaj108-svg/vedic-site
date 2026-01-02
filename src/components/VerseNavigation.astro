@@ -1,0 +1,37 @@
+---
+const { prev, next } = Astro.props;
+---
+
+<nav class="verse-nav">
+  {prev ? (
+    <a class="prev" href={prev.link}>← {prev.label}</a>
+  ) : (
+    <span></span>
+  )}
+
+  {next ? (
+    <a class="next" href={next.link}>{next.label} →</a>
+  ) : (
+    <span></span>
+  )}
+</nav>
+
+<style>
+.verse-nav {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 4rem;
+  padding-top: 2rem;
+  border-top: 1px solid #ddd;
+  font-family: serif;
+}
+
+.verse-nav a {
+  text-decoration: none;
+  color: #444;
+}
+
+.verse-nav a:hover {
+  text-decoration: underline;
+}
+</style>

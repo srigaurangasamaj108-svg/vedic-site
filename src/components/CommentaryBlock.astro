@@ -1,0 +1,13 @@
+---
+const { author, text } = Astro.props;
+---
+
+<section style="border-left: 3px solid #ddd; padding-left: 1rem; color: #555;">
+  <p style="font-size: 0.85rem; letter-spacing: 0.05em; margin-bottom: 0.5rem;">
+    {author.toUpperCase()}’S COMMENTARY
+  </p>
+
+  <p style="font-size: 0.95rem;">
+    {text}
+  </p>
+</section>

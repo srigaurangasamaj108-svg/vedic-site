@@ -1,0 +1,29 @@
+---
+import ReadingLayout from "../layouts/ReadingLayout.astro";
+import VerseBlock from "../components/VerseBlock.astro";
+import CommentaryBlock from "../components/CommentaryBlock.astro";
+import VerseNavigation from "../components/VerseNavigation.astro";
+---
+
+<ReadingLayout
+  title="Sāṅkhya Yoga"
+  subtitle="Bhagavad Gītā · Chapter 2"
+>
+  <!-- Verse -->
+  <VerseBlock
+    sanskrit="कर्मण्येवाधिकारस्ते मा फलेषु कदाचन ।"
+    translation="You have a right to perform your prescribed duties, but you are not entitled to the fruits of your actions."
+  />
+
+  <!-- Commentary -->
+  <CommentaryBlock
+    author="Śaṅkara"
+    text="Action must be performed as duty, without attachment to results, recognizing the higher order governing outcomes."
+  />
+
+  <!-- Navigation -->
+  <VerseNavigation
+    prev={{ label: "Verse 2.46", link: "/reading" }}
+    next={{ label: "Verse 2.48", link: "/reading" }}
+  />
+</ReadingLayout>
