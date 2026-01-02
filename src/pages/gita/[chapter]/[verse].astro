@@ -1,69 +1,46 @@
 ---
+import { getCollection } from 'astro:content';
 import ReadingLayout from "../../../layouts/ReadingLayout.astro";
 import VerseNavigation from "../../../components/VerseNavigation.astro";
 
-// REQUIRED: getStaticPaths must load data internally
+// 1. Tell Astro which pages to build based on your folders
 export async function getStaticPaths() {
-  const entries = Object.values(
-    import.meta.glob("../../../content/gita/**/verse-*.md", {
-      eager: true,
-    })
-  );
-
-  return entries.map((entry) => ({
-    params: {
-      chapter: entry.frontmatter.chapter.toString(),
-      verse: entry.frontmatter.verse.toString(),
-    },
-  }));
+  const entries = await getCollection('gita');
+  return entries.map((entry) => {
+    // Splits "chapter-2/verse-47" into two URL parameters
+    const [chapterSlug, verseSlug] = entry.slug.split('/');
+    return {
+      params: { chapter: chapterSlug, verse: verseSlug },
+      props: { entry },
+    };
+  });
 }
 
-// Load all entries AGAIN for rendering
-const allEntries = Object.values(
-  import.meta.glob("../../../content/gita/**/verse-*.md", {
-    eager: true,
-  })
-);
+// 2. Get the data for the specific page being viewed
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+const { title, book, chapter, verse } = entry.data;
 
-// Read URL params
-const { chapter, verse } = Astro.params;
-
-// Find matching verse
-const entry = allEntries.find(
-  (e) =>
-    e.frontmatter.chapter.toString() === chapter &&
-    e.frontmatter.verse.toString() === verse
-);
-
-if (!entry) {
-  throw new Error("Verse not found");
-}
-
-const { Content, frontmatter } = entry;
-const { book, title } = frontmatter;
-
-// Navigation logic
-const chapterNum = Number(chapter);
-const verseNum = Number(verse);
-
-const prev =
-  verseNum > 1
-    ? {
-        label: `Verse ${chapterNum}.${verseNum - 1}`,
-        link: `/gita/${chapterNum}/${verseNum - 1}`,
-      }
-    : null;
+// 3. Create Navigation links that work on ANY domain (Universal)
+// We use "../" to move up one folder level from the current verse
+const prev = verse > 1 ? {
+  label: `Verse ${chapter}.${verse - 1}`,
+  link: `../verse-${verse - 1}/`
+} : null;
 
 const next = {
-  label: `Verse ${chapterNum}.${verseNum + 1}`,
-  link: `/gita/${chapterNum}/${verseNum + 1}`,
+  label: `Verse ${chapter}.${verse + 1}`,
+  link: `../verse-${verse + 1}/`
 };
 ---
 
-<ReadingLayout
-  title={title}
+<ReadingLayout 
+  title={title} 
   subtitle={`${book} · Chapter ${chapter} · Verse ${verse}`}
 >
-  <Content />
+  <article>
+    <Content />
+  </article>
+  
   <VerseNavigation prev={prev} next={next} />
 </ReadingLayout>
