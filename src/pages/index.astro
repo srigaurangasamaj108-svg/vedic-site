@@ -1,16 +1,22 @@
 ---
-import Welcome from '../components/Welcome.astro';
+import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+// Fetch all entries from the 'gita' collection
+const allVerses = await getCollection('gita');
 ---
 
-<Layout>
+<Layout title="Bhagavad Gita - Vedic Site">
 	<h1>Welcome to Vedic Site</h1>
 	<p>Explore the Bhagavad Gita verses below:</p>
 	
 	<ul>
-		<li><a href="/vedic-site/gita/chapter-2/verse-47">Chapter 2, Verse 47</a></li>
+		{allVerses.map(verse => (
+			<li>
+				<a href={`/vedic-site/gita/${verse.slug}`}>
+					{verse.data.title || verse.slug.replace('-', ' ')}
+				</a>
+			</li>
+		))}
 	</ul>
 </Layout>
