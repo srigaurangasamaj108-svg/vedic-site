@@ -1,0 +1,34 @@
+---
+import { getCollection } from 'astro:content';
+import ReadingLayout from '../../layouts/ReadingLayout.astro';
+
+export async function getStaticPaths() {
+  const collections = ['sruti', 'smrti', 'purana', 'itihasa', 'upaveda', 'agama', 'darshana', 'gaudiya-vaisnava', 'gita'];
+  let allPaths = [];
+
+  for (const col of collections) {
+    const entries = await getCollection(col as any);
+    const paths = entries.map(entry => ({
+      params: { 
+        collection: col, 
+        // Astro's entry.slug includes the full folder path automatically
+        path: entry.slug 
+      },
+      props: { entry },
+    }));
+    allPaths = [...allPaths, ...paths];
+  }
+  return allPaths;
+}
+
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+const { book, chapter, verse, title } = entry.data;
+---
+
+<ReadingLayout title={title} book={book} chapter={chapter} verse={verse}>
+  <div class="verse-focus">
+    <div class="meta-info">Verse {chapter}.{verse}</div>
+    <Content />
+  </div>
+</ReadingLayout>

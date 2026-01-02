@@ -1,0 +1,143 @@
+/* ============================================================
+   VKAD MASTER DESIGN SYSTEM - FINAL COMPREHENSIVE SYNTHESIS
+   ============================================================ */
+
+:root {
+  /* 1. VEDIC COLOR PALETTE (The "Soul" Layer) */
+  --color-vedic-crimson: #8B0000;    /* Sacred Verses & Headings */
+  --color-deep-saffron: #FF9933;     /* Path Markers & Study Tools */
+  --color-forest-leaf: #2E5A27;      /* Ecology & Dharma Themes */
+
+  /* 2. NEUTRAL SURFACES (The "Parchment" Layer) */
+  --color-parchment-light: #FDFCF8;  /* Primary Reading Background */
+  --color-parchment-aged: #F4F1EA;   /* Side Panels & Commentary */
+  --color-parchment-border: #E6E2D3; /* Subtle Scholarly Dividers */
+
+  /* 3. INK & LEGIBILITY (The "Scholarly" Layer) */
+  --color-ink-primary: #1A1A1A;      /* Body Text (Maximum Contrast) */
+  --color-ink-secondary: #4A453E;    /* Translations & Metadata */
+  --color-ink-ghost: #9A948C;        /* Receding UI Labels */
+  
+  /* 4. TYPOGRAPHY (The "Voice" Layer) */
+  --font-reading: 'Crimson Pro', 'EB Garamond', serif; /* */
+  --font-sanskrit: 'Siddhanta', serif;                /* */
+  --font-ui: 'Inter', system-ui, sans-serif;          /* */
+  
+  /* 5. PROPORTION & SPACING (The "Divine" Layer) */
+  --reading-width-max: 720px;        /* */
+  --divine-ratio: 1.618;             /* */
+  --vertical-rhythm: 4rem;           /* */
+  --transition-speed: 0.4s;          /* */
+}
+
+/* ============================================================
+   READING-FIRST ARCHITECTURE
+   ============================================================ */
+
+body {
+  background-color: var(--color-parchment-light);
+  color: var(--color-ink-primary);
+  font-family: var(--font-reading);
+  font-size: 21px;         /* Desktop standard */
+  line-height: 1.8;        /* */
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Primary Reading Canvas */
+.reading-canvas {
+  max-width: var(--reading-width-max);
+  margin: 0 auto;
+  padding: var(--vertical-rhythm) calc(var(--divine-ratio) * 1rem);
+  position: relative;
+}
+
+/* Sanskrit Verse Styling */
+.verse-sanskrit {
+  color: var(--color-vedic-crimson);
+  font-family: var(--font-sanskrit);
+  text-align: center;
+  font-weight: 600;
+  font-size: 1.4rem;
+  margin-bottom: 2rem;
+  line-height: 1.4;
+}
+
+/* Traditional Commentary Panel */
+.commentary-panel {
+  background-color: var(--color-parchment-aged);
+  border-left: 1px solid var(--color-parchment-border);
+  padding: 2rem;
+  margin: 2.5rem 0;
+  font-size: 0.95em;
+  color: var(--color-ink-secondary);
+}
+
+/* ============================================================
+   INTERACTIVE ELEMENTS
+   ============================================================ */
+
+/* Ink-on-Paper Highlights */
+::selection {
+  background-color: rgba(139, 0, 0, 0.1); /* Vedic Crimson wash */
+  color: inherit;
+}
+
+/* Cross-references & Hover Principle */
+.cross-link {
+  color: var(--color-vedic-crimson);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.cross-link:hover {
+  border-bottom-color: var(--color-vedic-crimson);
+  background-color: rgba(139, 0, 0, 0.05);
+}
+
+/* Metadata & Recessive UI Labels */
+.meta-info {
+  color: var(--color-ink-ghost);
+  font-family: var(--font-ui);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* ============================================================
+   GLOBAL NAVIGATION (NON-INTRUSIVE)
+   ============================================================ */
+
+.header-global {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background-color: rgba(253, 252, 248, 0.95);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--color-parchment-border);
+  z-index: 1000;
+  transition: transform var(--transition-speed) ease-in-out;
+}
+
+/* Auto-hide header class for script.js */
+.header-hidden {
+  transform: translateY(-100%);
+}
+
+/* ============================================================
+   MOBILE OPTIMIZATION
+   ============================================================ */
+
+@media (max-width: 768px) {
+  body {
+    font-size: 18px;
+    line-height: 1.7;
+  }
+  
+  .reading-canvas {
+    padding: 2rem 1.2rem;
+  }
+}

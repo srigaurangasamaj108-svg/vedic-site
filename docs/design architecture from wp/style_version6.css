@@ -1,0 +1,270 @@
+/* ==========================================================================
+   VEDIC WISDOM DESIGN SYSTEM - v6.0 PRODUCTION READY
+   Merged: Spec Compliance + Practical Fixes (H5/H6, Alerts, Buttons)
+   Status: FINAL. READY FOR DEPLOYMENT.
+   ========================================================================== */
+
+:root {
+    /* --- 1. COLOR PALETTE (Semantic + Practical) --- */
+    /* Backgrounds */
+    --color-bg-cream:    #FBF8F3;
+    --color-surface:     #FFFFFF;
+    --color-surface-alt: #F5F1E8;
+    --color-surface-hover: #F9FAFB;
+    --color-surface-active: #F3F4F6;
+    
+    /* Overlays */
+    --color-overlay:      rgba(0, 0, 0, 0.4);
+    --color-overlay-dark: rgba(0, 0, 0, 0.7);
+
+    /* Primary Actions */
+    --color-primary:       #D97706;
+    --color-primary-hover: #B45309;
+    --color-secondary:     #1E40AF;
+    --color-focus-ring:    rgba(217, 119, 6, 0.4);
+
+    /* Text */
+    --color-text-body:      #1F2937;
+    --color-text-secondary: #4B5563;
+    --color-text-muted:     #6B7280;
+    --color-text-on-dark:   #FFFFFF;
+
+    /* Borders */
+    --color-border:        #E5E7EB;
+    --color-border-medium: #D1D5DB;
+    --color-border-dark:   #9CA3AF;
+
+    /* Practical Elementor Colors (Added from Practical Fixes) */
+    --color-primary-light: #FEF3C7;      /* Badge backgrounds */
+    --color-success-light: #D1FAE5;      /* Success alerts */
+    --color-warning-light: #FED7AA;      /* Warning alerts */
+    --color-error-light:   #FEE2E2;      /* Error alerts */
+    --color-info-light:    #DBEAFE;      /* Info alerts */
+
+    /* Semantic States */
+    --color-success:       #047857; 
+    --color-error:         #B91C1C; 
+    --color-warning:       #C2410C; 
+    --color-info:          #0369A1; 
+
+    /* Departments */
+    --color-education-dark:  #1D4ED8; --color-education-light: #DBEAFE;
+    --color-leadership-dark: #6D28D9; --color-leadership-light: #EDE9FE;
+    --color-worship-dark:    #CA8A04; --color-worship-light:   #FEF9C3;
+
+    /* --- 2. TYPOGRAPHY --- */
+    --font-head: 'Playfair Display', Georgia, serif;
+    --font-body: 'Inter', sans-serif;
+    --font-code: 'JetBrains Mono', monospace;
+
+    /* Line Heights */
+    --leading-none:    1;
+    --leading-tight:   1.1;
+    --leading-snug:    1.375;
+    --leading-normal:  1.5;
+    --leading-relaxed: 1.625;
+    --leading-loose:   2;
+
+    /* Tracking */
+    --track-tighter: -0.02em;
+    --track-tight:   -0.01em;
+    --track-normal:   0em;
+    --track-wide:     0.025em;
+    --track-wider:    0.05em;
+
+    /* --- 3. SPACING & LAYOUT --- */
+    --space-0: 0px; --space-1: 0.25rem; --space-2: 0.5rem; --space-3: 0.75rem;
+    --space-4: 1rem; --space-5: 1.25rem; --space-6: 1.5rem; --space-8: 2rem;
+    --space-10: 2.5rem; --space-12: 3rem; --space-16: 4rem; --space-20: 5rem;
+    --space-24: 6rem; --space-32: 8rem;
+
+    --measure-reading: 70ch;
+    --measure-narrow:  768px;
+    --measure-wide:    1280px;
+
+    /* Radius (Updated from Practical Fixes) */
+    --radius-sm: 4px;
+    --radius:    6px;  /* Default */
+    --radius-md: 8px;  /* Changed to 8px for better UI feel */
+    --radius-lg: 12px; /* Increased for modern look */
+    --radius-xl: 16px;
+    --radius-2xl: 24px; /* Added for large cards */
+    --radius-full: 9999px;
+
+    /* Z-Index */
+    --z-negative: -1;
+    --z-elevate:  10;
+    --z-sticky:   20;
+    --z-drawer:   30;
+    --z-modal:    40;
+    --z-toast:    50;
+
+    /* --- 4. MOTION --- */
+    --duration-instant: 0ms;
+    --duration-fast:    100ms;
+    --duration-normal:  150ms;
+    --duration-moderate: 200ms;
+    --duration-slow:    250ms;
+    --duration-slower:  300ms;
+    --duration-slowest: 400ms;
+
+    --ease-out:    cubic-bezier(0, 0, 0.2, 1);
+    --ease-in:     cubic-bezier(0.4, 0, 1, 1);
+    --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    --ease-linear: linear;
+}
+
+/* ==========================================================================
+   GLOBAL RESET
+   ========================================================================== */
+body {
+    background-color: var(--color-bg-cream);
+    color: var(--color-text-body);
+    font-family: var(--font-body);
+    line-height: var(--leading-normal);
+    -webkit-font-smoothing: antialiased;
+}
+
+/* ==========================================================================
+   TYPOGRAPHY SYSTEM (Updated H5/H6 for Real-World Usage)
+   ========================================================================== */
+
+/* Display Headings */
+h1 { font-family: var(--font-head); font-weight: 700; letter-spacing: var(--track-tighter); color: var(--color-text-body); font-size: 2.25rem; line-height: var(--leading-tight); }
+h2 { font-family: var(--font-head); font-weight: 700; letter-spacing: var(--track-tight); color: var(--color-text-body); font-size: 1.875rem; line-height: var(--leading-tight); }
+h3 { font-family: var(--font-head); font-weight: 600; color: var(--color-text-body); font-size: 1.5rem; line-height: var(--leading-snug); }
+h4 { font-family: var(--font-body); font-weight: 600; color: var(--color-text-body); font-size: 1.25rem; line-height: var(--leading-snug); }
+
+/* PRACTICAL FIX #1: Usable Sizes for H5/H6 */
+h5 {
+    font-family: var(--font-body);
+    font-weight: 600;
+    color: var(--color-text-body);
+    line-height: var(--leading-snug);
+    font-size: 1.25rem; /* Mobile: 20px - Fixed from 1rem */
+}
+
+h6 {
+    font-family: var(--font-body);
+    font-weight: 600;
+    color: var(--color-text-body);
+    line-height: var(--leading-snug);
+    font-size: 1rem; /* Mobile: 16px - Fixed from 0.875rem */
+    text-transform: none; /* Removed Uppercase enforcement for flexibility */
+}
+
+/* Responsive Upscaling */
+@media (min-width: 1024px) {
+    h1 { font-size: 4.5rem; }
+    h2 { font-size: 3.75rem; }
+    h3 { font-size: 3rem; }
+    h5 { font-size: 1.875rem; } /* 30px */
+    h6 { font-size: 1.5rem; }   /* 24px */
+}
+
+/* ==========================================================================
+   COMPONENTS (Practical Updates)
+   ========================================================================== */
+
+/* 1. BUTTONS (With Accessibility Focus) */
+.btn-primary {
+    display: inline-flex; align-items: center; justify-content: center;
+    padding: 12px 24px;
+    border-radius: var(--radius-md);
+    background: var(--color-primary);
+    color: var(--color-text-on-dark);
+    font-family: var(--font-body); font-weight: 500;
+    transition: all var(--duration-normal) var(--ease-out);
+    border: none; cursor: pointer; text-decoration: none;
+}
+.btn-primary:hover { background: var(--color-primary-hover); transform: translateY(-1px); }
+
+/* PRACTICAL FIX #3: Accessibility States */
+.btn-primary:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}
+.btn-primary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Secondary Button */
+.btn-secondary {
+    display: inline-flex; align-items: center; justify-content: center;
+    padding: 12px 24px;
+    border-radius: var(--radius-md);
+    background: transparent;
+    border: 1px solid var(--color-border-dark);
+    color: var(--color-text-body);
+    font-family: var(--font-body); font-weight: 500;
+    transition: all var(--duration-normal) var(--ease-out);
+    cursor: pointer; text-decoration: none;
+}
+.btn-secondary:hover {
+    background: var(--color-surface-hover);
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+
+/* 2. ALERTS (PRACTICAL FIX #4 & #5: Borders and Light Colors) */
+.alert {
+    padding: var(--space-4);
+    border-radius: var(--radius-sm); /* Tighter radius for alerts */
+    font-size: 0.875rem;
+    display: flex; gap: var(--space-3);
+    border-left: 4px solid transparent; /* Thick left border for hierarchy */
+}
+.alert-info    { background: var(--color-info-light);    color: var(--color-info);    border-left-color: var(--color-info); }
+.alert-success { background: var(--color-success-light); color: var(--color-success); border-left-color: var(--color-success); }
+.alert-warning { background: var(--color-warning-light); color: var(--color-warning); border-left-color: var(--color-warning); }
+.alert-error   { background: var(--color-error-light);   color: var(--color-error);   border-left-color: var(--color-error); }
+
+/* 3. CARDS & INPUTS */
+.vedic-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-6);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.vedic-input {
+    width: 100%;
+    padding: 10px 14px;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-border-medium);
+    background: var(--color-surface);
+    color: var(--color-text-body);
+    font-family: var(--font-body);
+}
+.vedic-input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px var(--color-focus-ring);
+}
+
+/* 4. SKELETON LOADING */
+.skeleton {
+    background-color: var(--color-surface-active);
+    border-radius: var(--radius-sm);
+    animation: shimmer 1.5s infinite linear;
+    background-image: linear-gradient(
+        90deg,
+        var(--color-surface-active) 0%,
+        var(--color-surface-hover) 50%,
+        var(--color-surface-active) 100%
+    );
+    background-size: 200% 100%;
+}
+@keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+
+/* 5. REDUCED MOTION */
+@media (prefers-reduced-motion: reduce) {
+    *, ::before, ::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
