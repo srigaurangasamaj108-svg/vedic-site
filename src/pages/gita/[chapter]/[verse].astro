@@ -39,6 +39,11 @@ const next = {
   subtitle={`${book} · Chapter ${chapter} · Verse ${verse}`}
 >
   <article>
+  <div style="margin-bottom: 2rem;">
+  <a href={`${import.meta.env.BASE_URL}/`} style="text-decoration: none; color: #666;">
+    ← Back to Verse List
+  </a>
+</div>
     <Content />
   </article>
   
