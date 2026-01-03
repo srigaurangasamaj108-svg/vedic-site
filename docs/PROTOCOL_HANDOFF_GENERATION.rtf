@@ -1,0 +1,111 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2867
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;\f1\fswiss\fcharset0 Helvetica-Bold;\f2\fswiss\fcharset0 Helvetica-Oblique;
+}
+{\colortbl;\red255\green255\blue255;\red24\green24\blue24;\red255\green255\blue255;\red52\green55\blue54;
+\red228\green234\blue244;\red109\green109\blue109;\red236\green241\blue247;\red205\green26\blue29;\red24\green112\blue43;
+\red22\green79\blue199;}
+{\*\expandedcolortbl;;\cssrgb\c12157\c12157\c12157;\cssrgb\c100000\c100000\c100000;\cssrgb\c26667\c27843\c27451;
+\cssrgb\c91373\c93333\c96471;\cssrgb\c50196\c50196\c50196;\cssrgb\c94118\c95686\c97647;\cssrgb\c85098\c18824\c14510;\cssrgb\c9412\c50196\c21961;
+\cssrgb\c9804\c40392\c82353;}
+\paperw11905\paperh16837\margl1133\margr1133\margb1133\margt1133
+\deftab720
+\pard\pardeftab720\sa320\partightenfactor0
+
+\f0\fs24 \cf2 \cb3 \up0 \nosupersub \ulnone Here is the standardized protocol file. Save this as \cf4 \cb5 PROTOCOL_HANDOFF_GENERATION.md\cf2 \cb3 . It will instruct future AI instances on exactly how to read your conversation history and generate an updated "Master Context" file.\
+\pard\pardeftab720\partightenfactor0
+\cf6 \
+\pard\pardeftab720\sa160\partightenfactor0
+
+\f1\b\fs28 \cf2 File Content: \cf4 \cb5 PROTOCOL_HANDOFF_GENERATION.md\cf2 \cb3 \
+\pard\pardeftab720\partightenfactor0
+
+\f0\b0\fs24 \cf4 \cb7 Markdown\cf4 \cb3 \
+\pard\pardeftab720\qc\partightenfactor0
+
+\fs48 \cf4 \
+\
+\
+\
+\pard\pardeftab720\partightenfactor0
+
+\fs28 \cf4 \cb7 # PROTOCOL: GENERATING THE "VKAD CONTEXT HANDOFF"\
+\pard\pardeftab720\partightenfactor0
+
+\f1\b \cf4 \cb7 **Purpose:**
+\f0\b0 \cf4 \cb7  To automate the creation of the Project State file for cross-session continuity.\
+
+\f1\b \cf4 \cb7 **Trigger:**
+\f0\b0 \cf4 \cb7  When the user requests: 
+\f2\i \cf4 \cb7 *"Generate Handoff"*
+\f0\i0 \cf4 \cb7 , 
+\f2\i \cf4 \cb7 *"Update Context File"*
+\f0\i0 \cf4 \cb7 , or 
+\f2\i \cf4 \cb7 *"Finalize Context"*
+\f0\i0 \cf4 \cb7 .\
+\
+## 1. SCANNING PHASE (The Analysis)\
+The AI must review the entire active conversation and extract the following:\
+\pard\pardeftab720\partightenfactor0
+\cf8 \cb7 *\cf4 \cb7  
+\f1\b \cf4 \cb7 **New Decisions:**
+\f0\b0 \cf4 \cb7  Any changes to architecture, styling, logic, or doctrine (e.g., "AI Badge Policy").\
+\cf8 \cb7 *\cf4 \cb7  
+\f1\b \cf4 \cb7 **New Code/Schemas:**
+\f0\b0 \cf4 \cb7  Any final data structures (Frontmatter) or component logic agreed upon.\
+\cf8 \cb7 *\cf4 \cb7  
+\f1\b \cf4 \cb7 **Feature Status:**
+\f0\b0 \cf4 \cb7  Identify which features moved from "Concept" to "Approved" or "Implemented".\
+\cf8 \cb7 *\cf4 \cb7  
+\f1\b \cf4 \cb7 **Current Mood:**
+\f0\b0 \cf4 \cb7  The user's preferred working style (e.g., "Architect-First").\
+\
+## 2. COMPILATION PHASE (The Update)\
+The AI must update the \cf9 \cb7 `VKAD_CONTEXT_HANDOFF.md`\cf4 \cb7  content following this structure:\
+\
+### A. Header Updates\
+\cf8 \cb7 *\cf4 \cb7  
+\f1\b \cf4 \cb7 **Timestamp:**
+\f0\b0 \cf4 \cb7  Update to the current Date/Time.\
+\cf8 \cb7 *\cf4 \cb7  
+\f1\b \cf4 \cb7 **Phase:**
+\f0\b0 \cf4 \cb7  Update if the project has moved (e.g., from Architecture -> Implementation).\
+\
+### B. Content Updates\
+\cf8 \cb7 *\cf4 \cb7  
+\f1\b \cf4 \cb7 **Section 0 (User Protocol):**
+\f0\b0 \cf4 \cb7  
+\f2\i \cf4 \cb7 *CRITICAL.*
+\f0\i0 \cf4 \cb7  Ensure the "Architect-First" protocol is at the top.\
+\cf8 \cb7 *\cf4 \cb7  
+\f1\b \cf4 \cb7 **Section 1 & 2 (Doctrine/Architecture):**
+\f0\b0 \cf4 \cb7  Add any new directory paths or tech stack decisions.\
+\cf8 \cb7 *\cf4 \cb7  
+\f1\b \cf4 \cb7 **Section 3 (Data Schema):**
+\f0\b0 \cf4 \cb7  Update the YAML frontmatter example if new fields (like \cf9 \cb7 `synonyms`\cf4 \cb7  or \cf9 \cb7 `source_status`\cf4 \cb7 ) were added.\
+\cf8 \cb7 *\cf4 \cb7  
+\f1\b \cf4 \cb7 **Section 5 (Feature Specs):**
+\f0\b0 \cf4 \cb7  Update the specifications for components (e.g., "Granular Visibility Controller" logic).\
+\cf8 \cb7 *\cf4 \cb7  
+\f1\b \cf4 \cb7 **Section 7 (Execution Queue):**
+\f0\b0 \cf4 \cb7  Refresh the immediate "Next Steps" based on the latest conversation.\
+\
+## 3. FORMATTING RULES\
+\cf8 \cb7 *\cf4 \cb7  
+\f1\b \cf4 \cb7 **No Summaries:**
+\f0\b0 \cf4 \cb7  Do not vaguely summarize. Be specific (e.g., include the exact Hex codes \cf9 \cb7 `#F9F7F2`\cf4 \cb7  or exact folder paths).\
+\cf8 \cb7 *\cf4 \cb7  
+\f1\b \cf4 \cb7 **Copy-Paste Ready:**
+\f0\b0 \cf4 \cb7  The output must be a single, clean Code Block ready for the user to save.\
+\cf8 \cb7 *\cf4 \cb7  
+\f1\b \cf4 \cb7 **Consistency:**
+\f0\b0 \cf4 \cb7  Use the exact same headings as the previous version to maintain structure.\
+\
+## 4. STANDARD OUTPUT PROMPT\
+\pard\pardeftab720\partightenfactor0
+
+\f2\i \cf4 \cb7 *When presenting the result, use this standard response:*
+\f0\i0 \cf4 \cb7 \
+\
+\pard\pardeftab720\partightenfactor0
+\cf10 \cb7 > "I have updated the VKAD CONTEXT HANDOFF file. It now includes [List 1-2 major changes]. You can copy the block below to start your next session."\cf4 \cb7 \
+}
