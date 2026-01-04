@@ -1,132 +1,33 @@
 ---
-import '../style/design-system.css';
-import MegaMenu from '../components/MegaMenu.astro';
+// 1. IMPORT THE STYLE ENGINE (Critical Fix)
 
-const { title, book, chapter, verse } = Astro.props;
+import '../styles/global.css';
+
+import SiteHeader from '../components/SiteHeader.astro';
+
+const { title = "Vedic Library" } = Astro.props;
 ---
 
-<html lang="sa">
+<!DOCTYPE html>
+<html lang="en">
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{book} {chapter}.{verse} | {title}</title>
-    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500&family=EB+Garamond:ital@0;1&display=swap" rel="stylesheet">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title}</title>
   </head>
-  <body>
-    <div class="header-system">
-      <header id="main-header" class="header-global">
-        <div class="header-content">
-          <div class="logo-group">
-            <div class="logo">VEDIC LIBRARY</div>
-            <button id="browse-btn" class="browse-trigger meta-info">
-              Browse <span>▾</span>
-            </button>
-          </div>
-          
-          <nav class="meta-info breadcrumb">
-            {book} / {chapter} / {verse}
-          </nav>
+  
+  <body class="min-h-screen flex flex-col">
+    
+   <SiteHeader />
 
-          <div class="utility-group">
-            <button id="toggle-sanskrit" class="meta-info">Sanskrit: ON</button>
-          </div>
-        </div>
-      </header>
-
-      <MegaMenu />
-    </div>
-
-    <main class="reading-interface">
-      <article class="reading-canvas">
-        <slot /> 
-      </article>
-
-      <aside id="right-panel" class="side-panel right meta-info">
-        <div class="panel-content aged-parchment">
-          <slot name="context" />
-        </div>
-      </aside>
+    <main class="flex-grow">
+      <slot />
     </main>
 
-    <script>
-      const browseBtn = document.getElementById('browse-btn');
-      const megaMenu = document.getElementById('mega-menu');
-      const header = document.getElementById('main-header');
+    <footer class="py-12 text-center text-xs font-sans text-ink-light opacity-50">
+      <p>Dedicated to the preservation of generic Vedic wisdom.</p>
+    </footer>
 
-      // Toggle Mega Menu
-      browseBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const isVisible = megaMenu.style.display === 'block';
-        megaMenu.style.display = isVisible ? 'none' : 'block';
-        browseBtn.classList.toggle('active');
-      });
-
-      // Close menu when clicking outside
-      document.addEventListener('click', () => {
-        megaMenu.style.display = 'none';
-        browseBtn.classList.remove('active');
-      });
-
-      // Auto-hide Header on Scroll
-      let lastScroll = 0;
-      window.addEventListener('scroll', () => {
-        const currentScroll = window.pageYOffset;
-        if (currentScroll > lastScroll && currentScroll > 60) {
-          header.classList.add('header-hidden');
-          megaMenu.style.display = 'none'; // Close menu on scroll
-        } else {
-          header.classList.remove('header-hidden');
-        }
-        lastScroll = currentScroll;
-      });
-    </script>
-
-    <style>
-      /* Layout Infrastructure */
-      .header-system { position: relative; z-index: 2000; }
-      
-      .header-global {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 60px;
-        background: var(--color-parchment-light);
-        border-bottom: 1px solid var(--color-parchment-border);
-        transition: transform 0.4s ease-in-out;
-      }
-
-      .header-hidden { transform: translateY(-100%); }
-
-      .header-content {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 0 2rem;
-        height: 100%;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-
-      .logo-group { display: flex; align-items: center; gap: 2rem; }
-      
-      .browse-trigger {
-        background: var(--color-vedic-crimson);
-        color: white !important;
-        border: none;
-        padding: 6px 14px;
-        border-radius: 4px;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        gap: 6px;
-      }
-
-      .reading-interface { 
-        display: flex; 
-        justify-content: center; 
-        padding-top: 100px; /* Offset for header */
-      }
-    </style>
   </body>
 </html>

@@ -1,0 +1,149 @@
+---
+import { getCollection } from 'astro:content';
+import { render } from 'astro:content';
+import ReadingLayout from '../../layouts/ReadingLayout.astro';
+
+export async function getStaticPaths() {
+  // 1. GET ALL VERSES & SORT THEM
+  const verses = await getCollection('gita');
+  
+  // Sort by Chapter then Verse
+  const sortedVerses = verses.sort((a, b) => {
+    if (a.data.chapter !== b.data.chapter) {
+      return a.data.chapter - b.data.chapter;
+    }
+    return a.data.verse - b.data.verse;
+  });
+
+  // 2. CALCULATE PREV/NEXT
+  return sortedVerses.map((entry, index) => {
+    const prevEntry = index > 0 ? sortedVerses[index - 1] : null;
+    const nextEntry = index < sortedVerses.length - 1 ? sortedVerses[index + 1] : null;
+
+    return {
+      params: { slug: `chapter-${entry.data.chapter}/verse-${entry.data.verse}` },
+      props: { 
+        entry,
+        prevSlug: prevEntry ? `/vedic-site/gita/chapter-${prevEntry.data.chapter}/verse-${prevEntry.data.verse}` : null,
+        nextSlug: nextEntry ? `/vedic-site/gita/chapter-${nextEntry.data.chapter}/verse-${nextEntry.data.verse}` : null,
+        prevLabel: prevEntry ? `Verse ${prevEntry.data.chapter}.${prevEntry.data.verse}` : null,
+        nextLabel: nextEntry ? `Verse ${nextEntry.data.chapter}.${nextEntry.data.verse}` : null,
+      },
+    };
+  });
+}
+
+const { entry, prevSlug, nextSlug, prevLabel, nextLabel } = Astro.props;
+const { Content } = await render(entry);
+const data = entry.data;
+---
+
+<ReadingLayout title={`Gita ${data.chapter}.${data.verse}`}>
+  
+  <div class="max-w-3xl mx-auto px-6 pb-24">
+    
+    <nav class="flex justify-between items-center text-sm text-ink-light font-sans uppercase tracking-widest mb-12">
+      <a href="/vedic-site/" class="hover:text-canon-red transition border-b border-transparent hover:border-canon-red">
+        ← Library
+      </a>
+      <span class="text-xs opacity-50">Chapter {data.chapter}</span>
+      {nextSlug ? (
+        <a href={nextSlug} class="hover:text-canon-red transition">Next →</a>
+      ) : (
+        <span class="opacity-30">End</span>
+      )}
+    </nav>
+
+    <div class="text-center mb-12 space-y-6">
+      {data.commentaries && data.commentaries[0] && (
+        <h1 class="text-3xl md:text-4xl font-serif leading-relaxed text-ink font-medium">
+          {data.commentaries[0].sanskrit}
+        </h1>
+      )}
+    </div>
+
+    {data.synonyms && (
+      <div class="mb-10 text-lg leading-relaxed font-serif bg-parchment-deep/30 p-6 rounded-lg border border-border-subtle">
+        {data.synonyms.map((item, index) => (
+          <span class="inline-block mr-2 mb-1">
+            <span class="text-canon-red font-medium">{item.word}</span> 
+            <span class="text-ink-light">—</span> 
+            <span class="text-ink">{item.meaning}</span>
+            {index !== data.synonyms.length - 1 ? ';' : ''}
+          </span>
+        ))}
+      </div>
+    )}
+
+    {data.commentaries && data.commentaries[0] && (
+      <div class="mb-12 font-serif text-xl font-bold text-ink leading-relaxed border-l-4 border-canon-red pl-6">
+        {data.commentaries[0].translation}
+      </div>
+    )}
+
+    <div class="prose prose-lg prose-p:text-ink prose-headings:font-serif prose-a:text-canon-red max-w-none">
+      <h3 class="font-sans text-sm uppercase tracking-widest text-ink-light mb-4 border-b border-border-subtle pb-2">
+        Purport
+      </h3>
+      <Content />
+    </div>
+
+    {data.commentaries && data.commentaries.length > 1 && (
+      <div class="mt-16 pt-12 border-t border-border-subtle">
+        <h3 class="font-sans text-sm uppercase tracking-widest text-ink-light mb-8">
+          Traditional Commentaries
+        </h3>
+        
+        <div class="space-y-4">
+          {data.commentaries.slice(1).map((comm) => (
+            <details class="group bg-white/50 border border-border-subtle rounded px-6 py-4">
+              <summary class="font-serif font-bold cursor-pointer list-none flex justify-between items-center text-ink">
+                <span>{comm.author}</span>
+                <span class="text-ink-light group-open:rotate-180 transition-transform">▼</span>
+              </summary>
+              
+              <div class="mt-4 text-ink-light space-y-4">
+                
+                {comm.source_status === 'ai-draft' && (
+                  <div class="inline-flex items-center text-xs font-sans bg-amber-100 text-amber-800 px-2 py-1 rounded mb-2">
+                    <span class="mr-1">⚠️</span> AI Draft - Unverified
+                  </div>
+                )}
+                
+                {comm.sanskrit && <p class="font-medium text-ink mb-2">{comm.sanskrit}</p>}
+                <p>{comm.translation}</p>
+              </div>
+            </details>
+          ))}
+        </div>
+      </div>
+    )}
+    
+    <div class="mt-24 pt-12 border-t border-border-subtle grid grid-cols-2 gap-4">
+      {prevSlug ? (
+        <a href={prevSlug} class="group text-left p-4 rounded hover:bg-parchment-deep/50 transition">
+          <span class="block text-xs font-sans text-ink-light uppercase tracking-widest mb-1 group-hover:text-canon-red">
+            ← Previous
+          </span>
+          <span class="font-serif text-lg text-ink font-medium">
+            {prevLabel}
+          </span>
+        </a>
+      ) : (
+        <div></div>
+      )}
+
+      {nextSlug && (
+        <a href={nextSlug} class="group text-right p-4 rounded hover:bg-parchment-deep/50 transition">
+          <span class="block text-xs font-sans text-ink-light uppercase tracking-widest mb-1 group-hover:text-canon-red">
+            Next →
+          </span>
+          <span class="font-serif text-lg text-ink font-medium">
+            {nextLabel}
+          </span>
+        </a>
+      )}
+    </div>
+
+  </div>
+</ReadingLayout>

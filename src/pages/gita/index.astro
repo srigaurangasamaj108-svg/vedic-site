@@ -1,0 +1,89 @@
+---
+import { getCollection } from 'astro:content';
+import ReadingLayout from '../../layouts/ReadingLayout.astro';
+
+// 1. GATHER DATA
+const allVerses = await getCollection('gita');
+
+// 2. GROUP VERSES BY CHAPTER
+const chapterMap = new Map();
+
+allVerses.forEach((verse) => {
+  const ch = verse.data.chapter;
+  
+  if (!chapterMap.has(ch)) {
+    chapterMap.set(ch, {
+      number: ch,
+      // Logic: If we have Verse 1, use its title. Otherwise, use a generic placeholder.
+      title: verse.data.verse === 1 ? verse.data.title : `Chapter ${ch}`,
+      verses_count: 0,
+      slug: `chapter-${ch}/verse-1` // Default entry point
+    });
+  }
+  
+  // Update count
+  const current = chapterMap.get(ch);
+  current.verses_count += 1;
+  
+  // Update title if we find a lower verse number (to get the best possible title)
+  if (verse.data.verse === 1) {
+    current.title = verse.data.title;
+  }
+  
+  // Update entry slug to the lowest verse we have (so if we only have v47, we link to v47)
+  if (!current.minVerse || verse.data.verse < current.minVerse) {
+      current.minVerse = verse.data.verse;
+      current.slug = `chapter-${ch}/verse-${verse.data.verse}`;
+  }
+});
+
+// Convert Map to Array and Sort
+const chapters = Array.from(chapterMap.values()).sort((a, b) => a.number - b.number);
+---
+
+<ReadingLayout title="Bhagavad Gītā - Table of Contents">
+  
+  <div class="max-w-4xl mx-auto px-6 py-12">
+    
+    <div class="text-center mb-16 border-b border-border-subtle pb-12">
+      <span class="font-sans text-xs font-bold text-canon-red uppercase tracking-widest mb-4 block">
+        Canonical Text
+      </span>
+      <h1 class="text-5xl md:text-6xl font-serif text-ink mb-6 font-bold">
+        Śrīmad Bhagavad Gītā
+      </h1>
+      <p class="text-xl font-serif text-ink-light italic">
+        "The Song of God"
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {chapters.length > 0 ? (
+        chapters.map((ch) => (
+          <a href={`/vedic-site/gita/${ch.slug}`} class="group block p-8 bg-white border border-border-subtle rounded hover:border-canon-red transition hover:shadow-lg">
+            
+            <div class="flex justify-between items-start mb-4">
+              <span class="font-sans text-xs text-canon-red font-bold uppercase tracking-widest border border-canon-red/20 px-2 py-1 rounded group-hover:bg-canon-red group-hover:text-white transition">
+                Chapter {ch.number}
+              </span>
+              <span class="font-sans text-xs text-ink-light uppercase tracking-widest">
+                {ch.verses_count} Verses
+              </span>
+            </div>
+            
+            <h2 class="text-2xl font-serif text-ink group-hover:text-canon-red transition">
+              {ch.title}
+            </h2>
+            
+          </a>
+        ))
+      ) : (
+        /* EMPTY STATE (Safe Fallback) */
+        <div class="col-span-2 text-center py-12 text-ink-light opacity-50 italic border border-dashed border-border-subtle rounded">
+          No verses found in the database yet.
+        </div>
+      )}
+    </div>
+
+  </div>
+</ReadingLayout>

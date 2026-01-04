@@ -1,0 +1,305 @@
+---
+import { getCollection } from 'astro:content';
+
+// 1. INTELLIGENT DEEP SCAN
+// This function parses the file path (id) to find sub-categories
+async function getLibraryStructure(collectionName) {
+  try {
+    const entries = await getCollection(collectionName);
+    if (!entries || entries.length === 0) return {};
+
+    // We build a tree: { "SubCategory": ["Book A", "Book B"], "Root": ["Book C"] }
+    const tree = {};
+
+    entries.forEach(entry => {
+      // Split path: "dharma-shastra/manu-samhita/ch1/v1.md"
+      const parts = entry.id.split('/');
+      const bookName = entry.data.book;
+
+      // If path has depth (e.g., subfolder exists), use it as Category
+      // If parts.length > 2, it means folder/book/...
+      // We assume the first folder is the Sub-Category
+      let subCategory = "General Collection";
+      
+      if (parts.length > 2) {
+         // Capitalize the folder name (e.g. "dharma-shastra" -> "Dharma Shastra")
+         subCategory = parts[0].replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+      }
+
+      if (!tree[subCategory]) {
+        tree[subCategory] = new Set();
+      }
+      tree[subCategory].add(bookName);
+    });
+
+    // Convert Sets to Arrays for rendering
+    const finalTree = {};
+    for (const [cat, books] of Object.entries(tree)) {
+      finalTree[cat] = Array.from(books).sort();
+    }
+    
+    // Move "General Collection" to the end if it exists
+    return finalTree;
+
+  } catch (e) {
+    return {};
+  }
+}
+
+// 2. FETCH THE STRUCTURES
+const srutiTree = await getLibraryStructure('sruti');
+const smrtiTree = await getLibraryStructure('smrti');
+const itihasaTree = await getLibraryStructure('itihasa');
+const puranaTree = await getLibraryStructure('purana');
+const agamaTree = await getLibraryStructure('agama');
+const vedangaTree = await getLibraryStructure('vedanga');
+const upavedaTree = await getLibraryStructure('upaveda');
+const darshanaTree = await getLibraryStructure('darshana');
+
+// 3. HELPER FOR RENDERING GROUPS
+function hasContent(tree) {
+  return Object.keys(tree).length > 0;
+}
+---
+
+<div class="absolute top-full left-0 w-[950px] bg-white border border-border-subtle shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 flex rounded-b-lg overflow-hidden h-[700px] -mt-0.5 font-sans">
+
+  <div class="w-[25%] bg-parchment-light border-r border-border-subtle flex flex-col py-2 text-ink">
+    
+    <button class="menu-level-1 active px-6 py-4 text-left flex justify-between items-center hover:bg-white hover:text-canon-red transition group/item border-l-4 border-transparent" data-target="panel-read">
+      <span class="font-serif text-lg font-medium group-hover/item:text-canon-red">Read Scriptures</span>
+      <span class="text-canon-red opacity-0 group-hover/item:opacity-100">›</span>
+    </button>
+
+    <button class="menu-level-1 px-6 py-4 text-left flex justify-between items-center hover:bg-white hover:text-canon-red transition group/item border-l-4 border-transparent" data-target="panel-explore">
+      <span class="font-serif text-lg font-medium group-hover/item:text-canon-red">Explore Themes</span>
+      <span class="text-canon-red opacity-0 group-hover/item:opacity-100">›</span>
+    </button>
+
+    <button class="menu-level-1 px-6 py-4 text-left flex justify-between items-center hover:bg-white hover:text-canon-red transition group/item border-l-4 border-transparent" data-target="panel-research">
+      <span class="font-serif text-lg font-medium group-hover/item:text-canon-red">Research & Seva</span>
+      <span class="text-canon-red opacity-0 group-hover/item:opacity-100">›</span>
+    </button>
+    
+    <button class="menu-level-1 px-6 py-4 text-left flex justify-between items-center hover:bg-white hover:text-canon-red transition group/item border-l-4 border-transparent" data-target="panel-paths">
+      <span class="font-serif text-lg font-medium group-hover/item:text-canon-red">Life Paths</span>
+      <span class="text-canon-red opacity-0 group-hover/item:opacity-100">›</span>
+    </button>
+
+     <button class="menu-level-1 px-6 py-4 text-left flex justify-between items-center hover:bg-white hover:text-canon-red transition group/item border-l-4 border-transparent" data-target="panel-tools">
+      <span class="font-serif text-lg font-medium group-hover/item:text-canon-red">Study Tools</span>
+      <span class="text-canon-red opacity-0 group-hover/item:opacity-100">›</span>
+    </button>
+
+  </div>
+
+  <div class="w-[75%] bg-white relative">
+    
+    <div id="panel-read" class="menu-level-2 absolute inset-0 p-8 overflow-y-auto custom-scrollbar">
+      <h3 class="font-sans text-xs font-bold text-ink-light uppercase tracking-widest mb-8 border-b border-border-subtle pb-2">
+        Canonical Library (Hierarchical)
+      </h3>
+      
+      <div class="grid grid-cols-2 gap-x-12 gap-y-12">
+        
+        <div class="space-y-10">
+          
+          <div>
+            <h4 class="font-serif font-bold text-ink text-xl mb-4 border-b border-border-subtle/50 pb-2">Śruti (Vedas)</h4>
+            {hasContent(srutiTree) ? Object.entries(srutiTree).map(([subCat, books]) => (
+              <div class="mb-4">
+                {subCat !== "General Collection" && <h5 class="text-xs font-bold text-ink-light uppercase tracking-widest mb-1 mt-3">{subCat}</h5>}
+                <ul class="text-sm space-y-1">
+                  {books.map(book => <li><a href="#" class="text-ink hover:text-canon-red block py-0.5">{book}</a></li>)}
+                </ul>
+              </div>
+            )) : <p class="text-xs text-ink-light italic">Digitization in progress...</p>}
+          </div>
+
+          <div>
+            <h4 class="font-serif font-bold text-ink text-xl mb-4 border-b border-border-subtle/50 pb-2">Smṛti</h4>
+             {hasContent(smrtiTree) ? Object.entries(smrtiTree).map(([subCat, books]) => (
+              <div class="mb-4">
+                {subCat !== "General Collection" && <h5 class="text-xs font-bold text-ink-light uppercase tracking-widest mb-1 mt-3">{subCat}</h5>}
+                <ul class="text-sm space-y-1">
+                  {books.map(book => (
+                    <li>
+                       <a href={book.includes('Gītā') ? "/vedic-site/gita" : "#"} class={`block py-0.5 hover:text-canon-red ${book.includes('Gītā') ? 'text-canon-red font-medium' : 'text-ink'}`}>
+                         {book}
+                       </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )) : <p class="text-xs text-ink-light italic">Digitization in progress...</p>}
+          </div>
+
+        </div>
+
+        <div class="space-y-10">
+          
+          <div>
+             <h4 class="font-serif font-bold text-ink text-xl mb-4 border-b border-border-subtle/50 pb-2">Purāṇa & Itihāsa</h4>
+             {hasContent(puranaTree) || hasContent(itihasaTree) ? (
+               <div class="space-y-4">
+                 {/* Combine Purana and Itihasa logic here visually if needed, or iterate similarly */}
+                 <ul class="text-sm space-y-1"><li class="text-ink">Śrīmad Bhāgavatam (Coming Soon)</li></ul>
+                 <ul class="text-sm space-y-1"><li class="text-ink">Mahābhārata</li></ul>
+               </div>
+             ) : <p class="text-xs text-ink-light italic">Coming Soon</p>}
+          </div>
+
+          <div>
+            <h4 class="font-serif font-bold text-ink text-xl mb-4 border-b border-border-subtle/50 pb-2">Auxiliary Sciences</h4>
+             <div class="grid grid-cols-2 gap-4">
+               <div>
+                 <h5 class="text-xs font-bold text-ink-light uppercase tracking-widest mb-1">Vedāṅga</h5>
+                 <ul class="text-sm space-y-1"><li class="text-ink opacity-60">Jyotiṣa</li><li class="text-ink opacity-60">Vyākaraṇa</li></ul>
+               </div>
+               <div>
+                 <h5 class="text-xs font-bold text-ink-light uppercase tracking-widest mb-1">Upaveda</h5>
+                 <ul class="text-sm space-y-1"><li class="text-ink opacity-60">Āyurveda</li><li class="text-ink opacity-60">Dhanurveda</li></ul>
+               </div>
+             </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+    <div id="panel-explore" class="menu-level-2 hidden absolute inset-0 p-8 overflow-y-auto">
+      <h3 class="font-sans text-xs font-bold text-ink-light uppercase tracking-widest mb-8 border-b border-border-subtle pb-2">Browse by Theme</h3>
+      <div class="grid grid-cols-2 gap-4">
+        <a href="#" class="p-4 border border-border-subtle rounded hover:border-canon-red hover:bg-parchment-light/30 transition flex items-center group">
+          <span class="mr-4 text-3xl grayscale group-hover:grayscale-0 transition">🏡</span> 
+          <div>
+             <span class="block font-serif text-lg text-ink font-bold">Family & Life</span>
+             <span class="text-xs text-ink-light">Grhastha Ashrama, Parenting</span>
+          </div>
+        </a>
+        <a href="#" class="p-4 border border-border-subtle rounded hover:border-canon-red hover:bg-parchment-light/30 transition flex items-center group">
+          <span class="mr-4 text-3xl grayscale group-hover:grayscale-0 transition">🦁</span> 
+          <div>
+            <span class="block font-serif text-lg text-ink font-bold">Leadership</span>
+            <span class="text-xs text-ink-light">Raja Dharma, Management</span>
+          </div>
+        </a>
+         <a href="#" class="p-4 border border-border-subtle rounded hover:border-canon-red hover:bg-parchment-light/30 transition flex items-center group">
+          <span class="mr-4 text-3xl grayscale group-hover:grayscale-0 transition">⚖️</span> 
+          <div>
+            <span class="block font-serif text-lg text-ink font-bold">Dharma & Ethics</span>
+            <span class="text-xs text-ink-light">Social Order, Morality</span>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <div id="panel-research" class="menu-level-2 hidden absolute inset-0 p-8 overflow-y-auto custom-scrollbar">
+      <h3 class="font-sans text-xs font-bold text-ink-light uppercase tracking-widest mb-8 border-b border-border-subtle pb-2">
+        Departments (Śrī Gaurāṅga Samāja)
+      </h3>
+      
+      <div class="grid grid-cols-2 gap-x-12 gap-y-8">
+        
+        <div>
+          <h4 class="font-serif font-bold text-ink mb-3 text-lg text-canon-red">Samāja Sevā (Social)</h4>
+          <ul class="space-y-2">
+            <li><a href="#" class="flex items-center text-ink hover:text-canon-red"><span class="w-1.5 h-1.5 bg-ink-light rounded-full mr-2"></span>Vṛddha-sevā (Elder Care)</a></li>
+            <li><a href="#" class="flex items-center text-ink hover:text-canon-red"><span class="w-1.5 h-1.5 bg-ink-light rounded-full mr-2"></span>Annadāna-sevā (Food Relief)</a></li>
+            <li><a href="#" class="flex items-center text-ink hover:text-canon-red"><span class="w-1.5 h-1.5 bg-ink-light rounded-full mr-2"></span>Nārī-utthāna (Women's Welfare)</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="font-serif font-bold text-ink mb-3 text-lg text-canon-red">Sāṁskṛtika (Cultural)</h4>
+          <ul class="space-y-2">
+            <li><a href="#" class="flex items-center text-ink hover:text-canon-red"><span class="w-1.5 h-1.5 bg-ink-light rounded-full mr-2"></span>Saṅkirtan-maṇḍalī</a></li>
+            <li><a href="#" class="flex items-center text-ink hover:text-canon-red"><span class="w-1.5 h-1.5 bg-ink-light rounded-full mr-2"></span>Utsava-maṇḍalī (Festivals)</a></li>
+            <li><a href="#" class="flex items-center text-ink hover:text-canon-red"><span class="w-1.5 h-1.5 bg-ink-light rounded-full mr-2"></span>Nāṭaka-mañca (Theatre)</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="font-serif font-bold text-ink mb-3 text-lg text-canon-red">Śikṣā & Anusandhāna</h4>
+          <ul class="space-y-2">
+            <li><a href="/vedic-site/departments/management" class="flex items-center text-ink hover:text-canon-red font-medium"><span class="w-1.5 h-1.5 bg-canon-red rounded-full mr-2"></span>Vedic Management</a></li>
+            <li><a href="#" class="flex items-center text-ink hover:text-canon-red"><span class="w-1.5 h-1.5 bg-ink-light rounded-full mr-2"></span>Āyurvedic-anusandhāna</a></li>
+            <li><a href="#" class="flex items-center text-ink hover:text-canon-red"><span class="w-1.5 h-1.5 bg-ink-light rounded-full mr-2"></span>Gurukula Vibhāga</a></li>
+          </ul>
+        </div>
+
+         <div>
+          <h4 class="font-serif font-bold text-ink mb-3 text-lg text-canon-red">Rakṣā & Parivāra</h4>
+          <ul class="space-y-2">
+            <li><a href="#" class="flex items-center text-ink hover:text-canon-red"><span class="w-1.5 h-1.5 bg-ink-light rounded-full mr-2"></span>Gou-sevā (Cow Protection)</a></li>
+            <li><a href="/vedic-site/departments/relationships" class="flex items-center text-ink hover:text-canon-red font-medium"><span class="w-1.5 h-1.5 bg-canon-red rounded-full mr-2"></span>Dāmpatya-jīvana (Marriage)</a></li>
+            <li><a href="#" class="flex items-center text-ink hover:text-canon-red"><span class="w-1.5 h-1.5 bg-ink-light rounded-full mr-2"></span>Garbha-Vijñāna</a></li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+
+    <div id="panel-paths" class="menu-level-2 hidden absolute inset-0 p-8 overflow-y-auto custom-scrollbar">
+        <h3 class="font-sans text-xs font-bold text-ink-light uppercase tracking-widest mb-8 border-b border-border-subtle pb-2">Support by Life Issue</h3>
+        
+        <div class="grid grid-cols-2 gap-x-12 gap-y-8">
+           <div>
+              <h4 class="font-serif font-bold text-ink mb-3">Relationship Challenges</h4>
+              <ul class="space-y-1 text-sm text-ink-light">
+                 <li><a href="#" class="hover:text-canon-red">Marital Discord & Divorce</a></li>
+                 <li><a href="#" class="hover:text-canon-red">Pre-Marital Counseling</a></li>
+                 <li><a href="#" class="hover:text-canon-red">Toxic Relationships</a></li>
+                 <li><a href="#" class="hover:text-canon-red">Parenting & ADHD</a></li>
+              </ul>
+           </div>
+           <div>
+              <h4 class="font-serif font-bold text-ink mb-3">Mental & Emotional</h4>
+              <ul class="space-y-1 text-sm text-ink-light">
+                 <li><a href="#" class="hover:text-canon-red">Stress & Anxiety (Vedic View)</a></li>
+                 <li><a href="#" class="hover:text-canon-red">Depression & Tamas</a></li>
+                 <li><a href="#" class="hover:text-canon-red">Trauma Recovery</a></li>
+                 <li><a href="#" class="hover:text-canon-red">Confidence & Self-Esteem</a></li>
+              </ul>
+           </div>
+        </div>
+    </div>
+
+     <div id="panel-tools" class="menu-level-2 hidden absolute inset-0 p-8">
+        <h3 class="font-sans text-xs font-bold text-ink-light uppercase tracking-widest mb-8 border-b border-border-subtle pb-2">Tools</h3>
+        <p class="text-ink-light italic">Detailed tools coming soon...</p>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  const triggers = document.querySelectorAll('.menu-level-1');
+  const panels = document.querySelectorAll('.menu-level-2');
+
+  triggers.forEach(trigger => {
+    trigger.addEventListener('mouseenter', () => {
+      // 1. Reset
+      triggers.forEach(t => {
+        t.classList.remove('bg-white', 'text-canon-red', 'border-canon-red');
+        t.classList.add('border-transparent');
+      });
+      panels.forEach(p => p.classList.add('hidden'));
+
+      // 2. Activate
+      trigger.classList.remove('border-transparent');
+      trigger.classList.add('bg-white', 'text-canon-red', 'border-canon-red');
+      
+      const targetId = trigger.getAttribute('data-target');
+      const targetPanel = document.getElementById(targetId);
+      if(targetPanel) targetPanel.classList.remove('hidden');
+    });
+  });
+</script>
+
+<style>
+  .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+  .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+  .custom-scrollbar::-webkit-scrollbar-thumb { background-color: #E5DCC5; border-radius: 20px; }
+</style>

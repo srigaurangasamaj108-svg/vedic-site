@@ -1,41 +1,63 @@
 import { defineCollection, z } from 'astro:content';
 
+// 1. THE UNIVERSAL VERSE SCHEMA
+// This governs every single scripture file (Gita, Upanishads, etc.)
 const verseSchema = defineCollection({
-  type: 'content',
+  type: 'content', 
   schema: z.object({
-    book: z.string(),
-    chapter: z.number(),
-    verse: z.number(),
-    title: z.string(),
-    commentary_author: z.string().optional(),
-    themes: z.array(z.string()).optional(),
-    life_paths: z.array(z.string()).optional(),
-    vibhagas: z.array(z.string()).optional(),
-  }),
+    // Canonical Identity
+    book: z.string(),       // e.g., "Bhagavad Gītā"
+    chapter: z.number(),    // e.g., 2
+    verse: z.number(),      // e.g., 47
+    title: z.string().optional(),
+
+    // Visual Data (Gita As It Is Style)
+    // Structured synonyms for Red/Black rendering
+    synonyms: z.array(
+      z.object({
+        word: z.string(),    // Sanskrit Word
+        meaning: z.string()  // English Meaning
+      })
+    ).optional(),
+
+    // Deep Study Layer (Commentaries)
+    commentaries: z.array(
+      z.object({
+        author: z.string(), // e.g., "Śrīdhara Svāmī"
+        sanskrit: z.string().optional(),
+        translation: z.string().optional(),
+        
+        // AI Safety Policy
+        source_status: z.enum(['canonical', 'verified', 'ai-draft', 'pending']).default('canonical')
+      })
+    ).optional(),
+
+    // Bridge Page Link
+    related_journal_slug: z.string().optional(),
+  })
 });
 
+// 2. THE DEPARTMENT SCHEMA
+// This governs the "Syllabus" lists
 const departmentSchema = defineCollection({
   type: 'content',
   schema: z.object({
     title: z.string(),
-    vibhaga_id: z.string(),
     description: z.string(),
-    target_paths: z.array(z.string()),
-    associated_pdfs: z.array(z.string()).optional(),
-  }),
+    steps: z.array(
+      z.object({
+        label: z.string(),
+        type: z.enum(['verse', 'pdf_ref']), // Strict choice
+        verse_slug: z.string().optional(),
+        pdf_url: z.string().optional(),
+        is_reference_only: z.boolean().default(false)
+      })
+    )
+  })
 });
 
+// 3. EXPORT COLLECTIONS
 export const collections = {
-  'sruti': verseSchema,
-  'smrti': verseSchema,
-  'purana': verseSchema,
-  'itihasa': verseSchema,
-  'upaveda': verseSchema,
-  'agama': verseSchema,
-  'darshana': verseSchema,
-  'gaudiya-vaisnava': verseSchema,
   'gita': verseSchema,
-  'upanga': verseSchema, 
-  'vedanga': verseSchema,
-  'departments': departmentSchema, 
+  'departments': departmentSchema,
 };

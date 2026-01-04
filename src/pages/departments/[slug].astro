@@ -1,0 +1,78 @@
+---
+import { getCollection } from 'astro:content';
+import { render } from 'astro:content';
+import ReadingLayout from '../../layouts/ReadingLayout.astro';
+
+// 1. GENERATE PATHS
+export async function getStaticPaths() {
+  const departments = await getCollection('departments');
+  return departments.map(entry => ({
+    params: { slug: entry.slug },
+    props: { entry },
+  }));
+}
+
+// 2. GET DATA
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const data = entry.data;
+---
+
+<ReadingLayout title={data.title}>
+  
+  <div class="bg-parchment-deep/30 border-b border-border-subtle py-16 px-6 text-center">
+    <span class="font-sans text-xs font-bold text-canon-red uppercase tracking-widest mb-4 block">
+      Department of
+    </span>
+    <h1 class="text-4xl md:text-5xl font-serif text-ink mb-6 font-bold">
+      {data.title}
+    </h1>
+    <p class="max-w-2xl mx-auto text-xl font-serif text-ink-light italic leading-relaxed">
+      "{data.description}"
+    </p>
+  </div>
+
+  <div class="max-w-5xl mx-auto px-6 py-12 grid grid-cols-1 lg:grid-cols-3 gap-12">
+    
+    <div class="lg:col-span-2 prose prose-lg prose-p:text-ink prose-headings:font-serif prose-headings:text-ink prose-a:text-canon-red">
+      <Content />
+    </div>
+
+    <div class="lg:col-span-1">
+      <div class="bg-white border border-border-subtle rounded-lg p-6 sticky top-32">
+        <h3 class="font-sans text-xs font-bold text-ink-light uppercase tracking-widest mb-6 border-b border-border-subtle pb-2">
+          Study Path
+        </h3>
+        
+        <div class="space-y-6">
+          {data.steps.map((step, index) => (
+            <div class="relative pl-6 border-l-2 border-border-subtle hover:border-canon-red transition group">
+              
+              <span class="absolute -left-[9px] top-0 w-4 h-4 bg-parchment-light border-2 border-border-subtle rounded-full group-hover:border-canon-red transition"></span>
+              
+              <h4 class="font-serif font-bold text-ink text-lg leading-tight mb-1">
+                {step.label}
+              </h4>
+              <p class="text-xs text-ink-light mb-3">
+                {step.description}
+              </p>
+
+              {step.type === 'verse' && step.verse_slug ? (
+                <a href={`/vedic-site/${step.verse_slug}`} class="inline-flex items-center text-xs font-bold text-canon-red uppercase tracking-widest hover:underline">
+                  Read Verse →
+                </a>
+              ) : (
+                <span class="inline-flex items-center text-xs font-bold text-ink-light uppercase tracking-widest opacity-50 cursor-not-allowed">
+                  Reference Only
+                </span>
+              )}
+            </div>
+          ))}
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+</ReadingLayout>

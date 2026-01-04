@@ -1,121 +1,144 @@
 ---
-import { getCollection } from 'astro:content';
-const smrtiEntries = await getCollection('smrti');
-const uniqueBooks = [...new Set(smrtiEntries.map(e => e.data.book))];
+// src/components/MegaMenu.astro
+// THE BLUEPRINT VISION: Tabbed Navigation for Deep Discovery
 ---
 
-<div id="mega-menu" class="mega-menu-overlay">
-  <div class="mega-menu-container">
+<div class="absolute top-full left-0 w-full bg-parchment-light border-b-4 border-canon-red shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 -mt-1 font-sans text-ink">
+  
+  <div class="max-w-7xl mx-auto flex min-h-[400px]">
     
-    <nav class="mega-tabs">
-      <button class="tab-btn active" data-target="read-section">Read</button>
-      <button class="tab-btn" data-target="themes-section">Explore Themes</button>
-      <button class="tab-btn" data-target="paths-section">Life Paths</button>
-    </nav>
+    <div class="w-1/4 bg-parchment-deep/20 border-r border-border-subtle flex flex-col py-6">
+      
+      <button class="menu-tab active text-left px-8 py-4 hover:bg-white/50 transition-colors border-l-4 border-transparent hover:border-canon-red/30 focus:outline-none" data-target="panel-read">
+        <span class="block font-bold uppercase tracking-widest text-xs text-canon-red">01. Read</span>
+        <span class="block font-serif text-xl mt-1">Canonical Texts</span>
+      </button>
 
-    <div id="read-section" class="mega-pane active">
-      <div class="column-grid">
-        <div class="col">
-          <h4 class="label">Scripture Categories</h4>
-          <ul class="nav-list">
-            <li class="highlight">Śruti (Vedas)</li>
-            <li>Smṛti</li>
-            <li>Itihāsa</li>
-            <li>Purāṇa</li>
-            <li>Āgama & Tantra</li>
-            <li>Vedāṅga</li>
-            <li>Upaveda</li>
-          </ul>
-        </div>
-        <div class="col">
-          <h4 class="label">Texts</h4>
-          <ul class="nav-list">
-            <li><a href="#">Ṛg Veda</a></li>
-            <li><a href="#">Yajur Veda</a></li>
-            <li><a href="#">Sāma Veda</a></li>
-            {uniqueBooks.map(book => (
-              <li><a href="/vedic-site/smrti/dharma-shastra/manu-samhita/chapter-1/verse-103">{book}</a></li>
-            ))}
-          </ul>
-        </div>
-        <div class="col">
-          <h4 class="label">Reading Guide</h4>
-          <ul class="nav-list">
-            <li><a href="#">How to Read</a></li>
-            <li><a href="#">Traditional Structure</a></li>
-            <li><a href="#">Recommended Order</a></li>
-          </ul>
-        </div>
-        <div class="col status-col">
-          <p class="meta-info italic">Sign in to track your reading progress</p>
-        </div>
-      </div>
+      <button class="menu-tab text-left px-8 py-4 hover:bg-white/50 transition-colors border-l-4 border-transparent hover:border-canon-red/30 focus:outline-none" data-target="panel-themes">
+        <span class="block font-bold uppercase tracking-widest text-xs text-ink-light">02. Explore</span>
+        <span class="block font-serif text-xl mt-1">Vedic Themes</span>
+      </button>
+
+      <button class="menu-tab text-left px-8 py-4 hover:bg-white/50 transition-colors border-l-4 border-transparent hover:border-canon-red/30 focus:outline-none" data-target="panel-paths">
+        <span class="block font-bold uppercase tracking-widest text-xs text-ink-light">03. Apply</span>
+        <span class="block font-serif text-xl mt-1">Life Paths</span>
+      </button>
+      
     </div>
 
-    <div id="themes-section" class="mega-pane">
-      <div class="themes-visual-grid">
-        <div class="theme-box"><span>📚</span> Childhood & Education</div>
-        <div class="theme-box"><span>🏡</span> Family & Life</div>
-        <div class="theme-box"><span>🕉️</span> Spiritual Growth</div>
-        <div class="theme-box"><span>💭</span> Philosophy & Knowledge</div>
-        <div class="theme-box"><span>🌿</span> Health & Living</div>
-        <div class="theme-box"><span>🌍</span> Ecology & Dharma</div>
+    <div class="w-3/4 bg-white/50 relative">
+      
+      <div id="panel-read" class="menu-panel absolute inset-0 p-8 grid grid-cols-3 gap-8">
+        <div class="space-y-4 border-r border-border-subtle pr-8">
+          <h4 class="font-sans text-[0.6rem] font-bold text-ink-light uppercase tracking-widest">Scripture Category</h4>
+          <ul class="space-y-2">
+            <li><a href="#" class="block font-serif text-lg text-canon-red font-medium">Smṛti (Remembrance)</a></li>
+            <li><a href="#" class="block font-serif text-lg text-ink hover:text-canon-red transition opacity-60">Śruti (Hearing)</a></li>
+            <li><a href="#" class="block font-serif text-lg text-ink hover:text-canon-red transition opacity-60">Itihāsa (History)</a></li>
+            <li><a href="#" class="block font-serif text-lg text-ink hover:text-canon-red transition opacity-60">Purāṇa (Ancient)</a></li>
+          </ul>
+        </div>
+        
+        <div class="col-span-2 space-y-6">
+          <h4 class="font-sans text-[0.6rem] font-bold text-ink-light uppercase tracking-widest">Available Texts in Smṛti</h4>
+          <div class="grid grid-cols-2 gap-4">
+             <a href="/vedic-site/gita" class="group block p-4 rounded border border-border-subtle hover:border-canon-red hover:shadow-sm transition bg-white">
+               <span class="block font-serif text-lg font-bold group-hover:text-canon-red">Bhagavad Gītā</span>
+               <span class="block text-xs text-ink-light mt-1">The Essence of Upanishads</span>
+             </a>
+             <a href="#" class="group block p-4 rounded border border-border-subtle hover:border-canon-red hover:shadow-sm transition bg-white opacity-60 cursor-not-allowed">
+               <span class="block font-serif text-lg font-bold">Manu Saṁhitā</span>
+               <span class="block text-xs text-ink-light mt-1">Codes of Dharma</span>
+             </a>
+          </div>
+        </div>
       </div>
+
+      <div id="panel-themes" class="menu-panel hidden absolute inset-0 p-8 overflow-y-auto">
+        <h4 class="font-sans text-[0.6rem] font-bold text-ink-light uppercase tracking-widest mb-6">Explore by Theme</h4>
+        <div class="grid grid-cols-3 gap-4">
+          <a href="#" class="flex flex-col items-center p-6 border border-border-subtle rounded hover:border-canon-red hover:bg-white hover:shadow-md transition text-center group">
+            <span class="text-3xl mb-3 grayscale group-hover:grayscale-0 transition">🦁</span>
+            <span class="font-serif text-ink font-medium group-hover:text-canon-red">Leadership</span>
+          </a>
+          <a href="#" class="flex flex-col items-center p-6 border border-border-subtle rounded hover:border-canon-red hover:bg-white hover:shadow-md transition text-center group">
+            <span class="text-3xl mb-3 grayscale group-hover:grayscale-0 transition">🏡</span>
+            <span class="font-serif text-ink font-medium group-hover:text-canon-red">Family Life</span>
+          </a>
+          <a href="#" class="flex flex-col items-center p-6 border border-border-subtle rounded hover:border-canon-red hover:bg-white hover:shadow-md transition text-center group">
+            <span class="text-3xl mb-3 grayscale group-hover:grayscale-0 transition">🧘</span>
+            <span class="font-serif text-ink font-medium group-hover:text-canon-red">Yoga & Mind</span>
+          </a>
+          <a href="#" class="flex flex-col items-center p-6 border border-border-subtle rounded hover:border-canon-red hover:bg-white hover:shadow-md transition text-center group">
+            <span class="text-3xl mb-3 grayscale group-hover:grayscale-0 transition">⚖️</span>
+            <span class="font-serif text-ink font-medium group-hover:text-canon-red">Dharma</span>
+          </a>
+          <a href="#" class="flex flex-col items-center p-6 border border-border-subtle rounded hover:border-canon-red hover:bg-white hover:shadow-md transition text-center group">
+            <span class="text-3xl mb-3 grayscale group-hover:grayscale-0 transition">🌿</span>
+            <span class="font-serif text-ink font-medium group-hover:text-canon-red">Health</span>
+          </a>
+           <a href="#" class="flex flex-col items-center p-6 border border-border-subtle rounded hover:border-canon-red hover:bg-white hover:shadow-md transition text-center group">
+            <span class="text-3xl mb-3 grayscale group-hover:grayscale-0 transition">🌍</span>
+            <span class="font-serif text-ink font-medium group-hover:text-canon-red">Ecology</span>
+          </a>
+        </div>
+      </div>
+
+      <div id="panel-paths" class="menu-panel hidden absolute inset-0 p-8">
+        <div class="grid grid-cols-2 gap-12">
+          <div>
+            <h4 class="font-sans text-[0.6rem] font-bold text-ink-light uppercase tracking-widest mb-6">By Life Stage</h4>
+            <ul class="space-y-4">
+              <li><a href="#" class="flex items-center font-serif text-lg text-ink hover:text-canon-red transition"><span class="w-2 h-2 bg-ink-light rounded-full mr-3"></span>Student (Brahmacārī)</a></li>
+              <li><a href="/vedic-site/departments/relationships" class="flex items-center font-serif text-lg text-ink hover:text-canon-red transition"><span class="w-2 h-2 bg-canon-red rounded-full mr-3"></span>Householder (Gṛhastha)</a></li>
+              <li><a href="#" class="flex items-center font-serif text-lg text-ink hover:text-canon-red transition"><span class="w-2 h-2 bg-ink-light rounded-full mr-3"></span>Retired (Vānaprastha)</a></li>
+            </ul>
+          </div>
+          <div>
+             <h4 class="font-sans text-[0.6rem] font-bold text-ink-light uppercase tracking-widest mb-6">By Goal</h4>
+             <ul class="space-y-4">
+              <li><a href="#" class="font-serif text-lg text-ink hover:text-canon-red transition">For Managers & Leaders</a></li>
+              <li><a href="#" class="font-serif text-lg text-ink hover:text-canon-red transition">For Spiritual Seekers</a></li>
+              <li><a href="#" class="font-serif text-lg text-ink hover:text-canon-red transition">For Academic Researchers</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 </div>
 
-<style>
-  .mega-menu-overlay {
-    position: absolute; /* Connects to header */
-    top: 60px;
-    left: 0;
-    width: 100%;
-    background: #FDFCF8; /* Parchment Light */
-    border-bottom: 2px solid #8B0000; /* Vedic Crimson */
-    display: none;
-    z-index: 1000;
-    padding: 2rem 0 4rem 0;
-    box-shadow: 0 15px 30px rgba(0,0,0,0.08);
-  }
-
-  .mega-menu-container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
-
-  .mega-tabs { display: flex; gap: 2.5rem; border-bottom: 1px solid #E6E2D3; margin-bottom: 2rem; }
-  .tab-btn { background: none; border: none; padding: 1rem 0; cursor: pointer; color: #9A948C; font-family: 'Inter', sans-serif; }
-  .tab-btn.active { color: #8B0000; border-bottom: 2px solid #8B0000; font-weight: 600; }
-
-  /* THE COLUMN GRID FIX */
-  .column-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; }
-  
-  .mega-pane { display: none; }
-  .mega-pane.active { display: block; }
-
-  .label { font-size: 0.7rem; color: #9A948C; text-transform: uppercase; margin-bottom: 1.5rem; letter-spacing: 0.05em; }
-  .nav-list { list-style: none; padding: 0; }
-  .nav-list li { margin-bottom: 0.8rem; font-family: 'Crimson Pro', serif; font-size: 1.1rem; }
-  .nav-list a { text-decoration: none; color: #1A1A1A; }
-  .nav-list a:hover { color: #8B0000; }
-  .highlight { color: #8B0000; font-weight: 600; }
-
-  /* THEMES VISUAL GRID */
-  .themes-visual-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
-  .theme-box { border: 1px solid #E6E2D3; padding: 1.5rem; border-radius: 8px; background: white; text-align: center; }
-
-  .italic { font-style: italic; color: #9A948C; }
-</style>
-
 <script>
-  // Tab Switching Logic
-  const tabs = document.querySelectorAll('.tab-btn');
-  const panes = document.querySelectorAll('.mega-pane');
+  // Simple Vanilla JS for Tab Switching
+  const tabs = document.querySelectorAll('.menu-tab');
+  const panels = document.querySelectorAll('.menu-panel');
 
   tabs.forEach(tab => {
     tab.addEventListener('mouseenter', () => {
-      tabs.forEach(t => t.classList.remove('active'));
-      panes.forEach(p => p.classList.remove('active'));
-      tab.classList.add('active');
-      document.getElementById(tab.dataset.target).classList.add('active');
+      // 1. Deactivate all
+      tabs.forEach(t => {
+        t.classList.remove('active', 'border-l-4', 'border-canon-red', 'bg-white');
+        const label = t.querySelector('span:first-child');
+        if(label) label.classList.replace('text-canon-red', 'text-ink-light');
+      });
+      panels.forEach(p => p.classList.add('hidden'));
+
+      // 2. Activate current
+      tab.classList.add('active', 'border-l-4', 'border-canon-red', 'bg-white');
+      const activeLabel = tab.querySelector('span:first-child');
+      if(activeLabel) activeLabel.classList.replace('text-ink-light', 'text-canon-red');
+      
+      const targetId = tab.getAttribute('data-target');
+      document.getElementById(targetId).classList.remove('hidden');
     });
   });
 </script>
+
+<style>
+  /* Custom Active State for Tabs */
+  .menu-tab.active {
+    background-color: white;
+    border-left-color: #8B1E1E; /* Canon Red */
+  }
+</style>

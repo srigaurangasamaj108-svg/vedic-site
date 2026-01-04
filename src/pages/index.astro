@@ -1,25 +1,108 @@
 ---
-import { getCollection } from 'astro:content';
-import Layout from '../layouts/Layout.astro';
+import ReadingLayout from '../layouts/ReadingLayout.astro';
+import { getEntry } from 'astro:content';
 
-// 1. Automatically fetch all verse files from your content folder
-const allVerses = await getCollection('gita');
-
-// 2. Determine the Base URL (empty locally, /vedic-site on GitHub)
-const baseUrl = import.meta.env.BASE_URL;
+// 1. FETCH "VERSE OF THE DAY" (We use 2.47 as the seed)
+const dailyVerse = await getEntry('gita', 'chapter-2/verse-47');
+const verseData = dailyVerse ? dailyVerse.data : null;
 ---
 
-<Layout title="Bhagavad Gita - Vedic Site">
-	<h1>Welcome to Vedic Site</h1>
-	<p>Explore the Bhagavad Gita verses below:</p>
-	
-	<ul>
-		{allVerses.map(verse => (
-			<li>
-				<a href={`${baseUrl}/gita/${verse.slug}/`}>
-					{verse.data.title || verse.slug.replace('-', ' ')}
-				</a>
-			</li>
-		))}
-	</ul>
-</Layout>
+<ReadingLayout title="Vedic Library - Home">
+  
+  <div class="relative bg-parchment-light border-b border-border-subtle overflow-hidden">
+    
+    <div class="absolute top-0 left-0 w-full h-full opacity-5 pointer-events-none">
+       <div class="absolute -top-24 -left-24 w-96 h-96 rounded-full border-[40px] border-canon-red"></div>
+       <div class="absolute top-1/2 right-0 w-64 h-64 rounded-full border-[20px] border-ink"></div>
+    </div>
+
+    <div class="max-w-4xl mx-auto px-6 py-24 text-center relative z-10">
+      <span class="font-sans text-xs font-bold text-canon-red uppercase tracking-[0.2em] mb-6 block">
+        Est. 2026
+      </span>
+      <h1 class="text-6xl md:text-7xl font-serif text-ink mb-8 font-medium tracking-tight">
+        The Vedic Library
+      </h1>
+      <p class="text-xl md:text-2xl font-serif text-ink-light italic leading-relaxed">
+        "Preserving the architectural wisdom of the ancient seers for the digital age."
+      </p>
+      
+      <div class="mt-12 flex justify-center gap-6">
+        <a href="/vedic-site/gita" class="bg-canon-red text-white font-sans text-xs font-bold uppercase tracking-widest px-8 py-4 rounded hover:bg-ink transition shadow-lg">
+          Start Reading
+        </a>
+        <button class="text-ink font-sans text-xs font-bold uppercase tracking-widest px-8 py-4 hover:text-canon-red transition border border-transparent hover:border-border-subtle rounded">
+          About the Mission
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="max-w-7xl mx-auto px-6 py-20 -mt-12 relative z-20">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      
+      <a href="/vedic-site/gita" class="group bg-white p-10 border border-border-subtle rounded-lg shadow-sm hover:shadow-xl hover:border-canon-red transition duration-300 flex flex-col items-center text-center">
+        <span class="text-4xl mb-6 text-ink-light group-hover:text-canon-red transition">📖</span>
+        <h2 class="text-2xl font-serif text-ink mb-4">Canonical Texts</h2>
+        <p class="font-sans text-sm text-ink-light leading-relaxed mb-6">
+          Access the Śruti, Smṛti, and Purāṇas with word-for-word synonyms and traditional commentaries.
+        </p>
+        <span class="text-xs font-bold text-canon-red uppercase tracking-widest mt-auto group-hover:underline">
+          Open Library →
+        </span>
+      </a>
+
+      <a href="/vedic-site/departments/management" class="group bg-white p-10 border border-border-subtle rounded-lg shadow-sm hover:shadow-xl hover:border-canon-red transition duration-300 flex flex-col items-center text-center">
+        <span class="text-4xl mb-6 text-ink-light group-hover:text-canon-red transition">🏛️</span>
+        <h2 class="text-2xl font-serif text-ink mb-4">Applied Wisdom</h2>
+        <p class="font-sans text-sm text-ink-light leading-relaxed mb-6">
+          Practical application of Vedic principles for Management, Family Life, and Social Welfare.
+        </p>
+        <span class="text-xs font-bold text-canon-red uppercase tracking-widest mt-auto group-hover:underline">
+          View Departments →
+        </span>
+      </a>
+
+      <a href="/vedic-site/paths" class="group bg-white p-10 border border-border-subtle rounded-lg shadow-sm hover:shadow-xl hover:border-canon-red transition duration-300 flex flex-col items-center text-center">
+        <span class="text-4xl mb-6 text-ink-light group-hover:text-canon-red transition">🌿</span>
+        <h2 class="text-2xl font-serif text-ink mb-4">Life Paths</h2>
+        <p class="font-sans text-sm text-ink-light leading-relaxed mb-6">
+          Curated reading lists for Parents, Students, Leaders, and Seekers facing modern challenges.
+        </p>
+        <span class="text-xs font-bold text-canon-red uppercase tracking-widest mt-auto group-hover:underline">
+          Find Your Path →
+        </span>
+      </a>
+
+    </div>
+  </div>
+
+  {verseData && (
+    <div class="bg-parchment-deep/20 py-24 border-t border-border-subtle">
+      <div class="max-w-4xl mx-auto px-6 text-center">
+        
+        <span class="font-sans text-xs font-bold text-ink-light uppercase tracking-widest mb-8 block">
+          Daily Svādhyāya
+        </span>
+
+        <a href="/vedic-site/gita/chapter-2/verse-47" class="block group">
+          <h3 class="text-3xl md:text-4xl font-serif text-ink mb-8 leading-relaxed group-hover:text-canon-red transition">
+            {verseData.commentaries?.[0]?.sanskrit || "Karmanye vadhikaraste..."}
+          </h3>
+          
+          <div class="h-1 w-24 bg-canon-red mx-auto mb-8"></div>
+
+          <p class="text-xl font-serif text-ink-light italic max-w-2xl mx-auto">
+            "{verseData.commentaries?.[0]?.translation || "You have a right to perform your prescribed duty..."}"
+          </p>
+          
+          <div class="mt-8 font-sans text-xs font-bold text-ink uppercase tracking-widest opacity-60">
+            Bhagavad Gītā {verseData.chapter}.{verseData.verse}
+          </div>
+        </a>
+
+      </div>
+    </div>
+  )}
+
+</ReadingLayout>

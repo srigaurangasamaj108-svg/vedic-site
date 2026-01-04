@@ -1,0 +1,76 @@
+---
+import ReadingLayout from '../../layouts/ReadingLayout.astro';
+
+// Data for the Grid
+const personas = [
+  { title: "For Students", icon: "🎓", desc: "Focus, Memory, and Brahmacharya", link: "#" },
+  { title: "For Householders", icon: "🏡", desc: "Marriage, Parenting, and Finance", link: "/vedic-site/departments/relationships" },
+  { title: "For Leaders", icon: "🦁", desc: "Decision Making and Ethics", link: "/vedic-site/departments/management" },
+  { title: "For Seniors", icon: "👴", desc: "Vanaprastha and Renunciation", link: "#" },
+];
+
+const challenges = [
+  { title: "Overcoming Anxiety", icon: "🌊", verse: "2.47" },
+  { title: "Managing Anger", icon: "🔥", verse: "2.63" },
+  { title: "Facing Death", icon: "🍂", verse: "2.13" },
+  { title: "Finding Purpose", icon: "✨", verse: "18.66" },
+];
+---
+
+<ReadingLayout title="Life Paths - Vedic Guidance">
+  
+  <div class="bg-parchment-deep/20 py-20 text-center px-6 border-b border-border-subtle">
+    <span class="font-sans text-xs font-bold text-canon-red uppercase tracking-widest mb-4 block">
+      Guidance & Application
+    </span>
+    <h1 class="text-5xl md:text-6xl font-serif text-ink mb-6 font-bold">
+      Find Your Path
+    </h1>
+    <p class="max-w-2xl mx-auto text-xl font-serif text-ink-light italic leading-relaxed">
+      "The Vedas are not just for the temple. They are maps for the labyrinth of life."
+    </p>
+  </div>
+
+  <div class="max-w-6xl mx-auto px-6 py-16">
+    
+    <h2 class="text-center font-sans text-sm font-bold text-ink-light uppercase tracking-widest mb-12">
+      Select Your Stage of Life
+    </h2>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-24">
+      {personas.map(p => (
+        <a href={p.link} class="group bg-white p-8 border border-border-subtle rounded text-center hover:border-canon-red hover:shadow-lg transition">
+          <span class="text-4xl mb-4 block group-hover:scale-110 transition-transform">{p.icon}</span>
+          <h3 class="font-serif text-xl font-bold text-ink mb-2">{p.title}</h3>
+          <p class="font-sans text-xs text-ink-light">{p.desc}</p>
+        </a>
+      ))}
+    </div>
+
+    <div class="border-t border-border-subtle pt-24">
+      <h2 class="text-center font-sans text-sm font-bold text-ink-light uppercase tracking-widest mb-12">
+        Vedic Solutions for Modern Struggles
+      </h2>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        {challenges.map(c => (
+          <div class="flex items-center p-6 bg-white border border-border-subtle rounded hover:bg-parchment-light/30 transition group cursor-pointer">
+            <span class="text-3xl mr-6 bg-parchment-deep/20 w-16 h-16 flex items-center justify-center rounded-full group-hover:bg-canon-red group-hover:text-white transition">
+              {c.icon}
+            </span>
+            <div>
+              <h3 class="font-serif text-xl font-bold text-ink mb-1 group-hover:text-canon-red transition">
+                {c.title}
+              </h3>
+              <span class="font-sans text-xs font-bold text-ink-light uppercase tracking-widest">
+                See Verse {c.verse} →
+              </span>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+
+  </div>
+
+</ReadingLayout>

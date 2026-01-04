@@ -10,76 +10,53 @@ Markdown\
 \
 \
 \
-\# VKAD PROJECT: MASTER CONTEXT HANDOFF\
-**\*\*Project:\*\*** Vedic Knowledge Architecture & Documentation (VKAD)
-Platform\
-**\*\*Status:\*\*** Canonical Architecture Locked / Implementation Phase
-1\
-**\*\*Timestamp:\*\*** January 03, 2026\
-**\*\*Current Phase:\*\*** Core Reading Experience & Advanced UI
-Components\
-\
-\-\--\
-\
-\## 0. USER PROTOCOL: THE \"ARCHITECT-FIRST\" WORKFLOW (MANDATORY)\
-**\*\*The User acts as Chief Architect. The AI acts as
-Consultant.\*\***\
-1. **\*\*Phase 1 (The Overview):\*\*** Upon receiving a request, the AI
-must first provide **\*\*Technical Guidelines\*\*** and **\*\*Logical
-Overviews\*\*** (Flowcharts, Logic Maps, Trade-offs).\
-2. **\*\*STOP:\*\*** The AI must **\*\*wait\*\*** for user
-confirmation/improvisation.\
-3. **\*\*Phase 2 (The Execution):\*\*** Only *\*after\** explicit
-approval, the AI provides the Step-by-Step Implementation Plan and
-Code.\
-*\*Mood:\** Deliberate, iterative, \"Silence over Engagement.\" Do not
-rush to syntax.\
-\
-\-\--\
-\
-\## 1. CORE PHILOSOPHY & DOCTRINE\
-\* **\*\*The Metaphor:\*\*** \"A Digital Cathedral.\" Not a blog, not a
-feed. A custodial system for sacred text.\
-\* **\*\*VKAD-03 (UI Doctrine):\*\*** \"The interface must disappear.\"
-The Reading Page is the primary object. No popups, no infinite scroll,
-no high-saturation colors.\
-\* **\*\*VKAD-01 (Canon Doctrine):\*\*** One Verse = One File. The file
-system is the database. Technology is subordinate to Śāstra.\
-\* **\*\*VKAD-02 (Authorship):\*\*** Authors are stewards, not owners.
-AI translations are permitted *\*only\** as \"Provisional Witnesses\"
-with visible \"Draft\" badges.\
-\
-\-\--\
-\
-\## 2. SYSTEM ARCHITECTURE\
-\
-\### A. Tech Stack\
-\* **\*\*Framework:\*\*** Astro (Static Site Generation,
-Content-Focused).\
-\* **\*\*Styling:\*\*** Tailwind CSS (configured for \"Parchment\"
-palette).\
-\* **\*\*Data Source:\*\*** Markdown/MDX files with rigid Frontmatter
-schemas.\
-\
-\### B. Directory Structure\
-\`\`\`text\
-src/\
-„¥── content/\
-│ „¥── gita/ \# Primary Scripture (e.g., /chapter-2/verse-1.md)\
-│ „¥── sruti/ \# Vedas, Upanisads\
-│ „¥── smrti/ \# Dharma & Artha Shastras\
-│ „¥── journal/ \# Practical Application (The \"Annex\")\
-│ └── departments/ \# Curated Syllabi (VKAD-09)\
-„¥── components/\
-│ „¥── verse/\
-│ │ „¥── SmartVerseCard.astro \# Main Reading Component\
-│ │ „¥── ViewControls.jsx \# Granular Visibility Toggles\
-│ │ └── CommentaryStack.astro \# Scholar\'s Fold (Traditional Tīkās)\
-│ └── layouts/\
-│ „¥── ReadingLayout.astro \# Single Column, Parchment\
-│ └── SplitViewLayout.astro \# Bridge Page (Verse Left / Article Right)\
-\
-**3. DATA SCHEMA: THE \"UNIVERSAL VERSE\"**\
+# VKAD PROJECT: MASTER CONTEXT HANDOFF
+**Project:** Vedic Knowledge Architecture & Documentation (VKAD) Platform
+**Status:** Implementation Phase 1 (Foundation & Schema)
+**Timestamp:** January 03, 2026
+
+---
+
+## 0. USER PROTOCOL: THE "ARCHITECT-FIRST" WORKFLOW
+**The User acts as Chief Architect.**
+1.  **Phase 1:** AI provides Logical Overviews/Guidelines.
+2.  **STOP:** Wait for user confirmation.
+3.  **Phase 2:** AI provides Implementation Code.
+*Mood:* Deliberate, iterative. "Silence over Engagement."
+
+---
+
+## 1. CORE DOCTRINE & DECISIONS
+* **Visuals:** "Parchment Mode" Only (No Dark Mode V1).
+* **Fonts:** Local Hosting (No Google Fonts) for independence.
+* **Schema:** Strict Enforcement (Build fails if metadata is missing).
+* **PDFs:** Allowed in Departments but *only* as Reference Links.
+
+---
+
+## 2. SYSTEM ARCHITECTURE
+
+### A. The Reading Core
+* **Flow:** Continuous (Chapter 1 End → Chapter 2 Start).
+* **Default View:** Maximal (Show All).
+* **User Control:** "Advanced View" toggles stored in `localStorage`.
+
+### B. The Scholar's Layer
+* **Default State:** Collapsed (Silence).
+* **Ordering:** Chronological (Oldest Ācārya first).
+* **Toggles:** Global Scope (Switching to Sanskrit switches ALL cards).
+
+### C. The Practical Layer (Bridge Pages)
+* **Physics:** Sticky Left Panel (Verse Anchor) / Scrolling Right Panel (Article).
+* **Visuals:** Dual-Tone. Left = Parchment (`#F9F7F2`); Right = White (`#FCFCFA`).
+* **Navigation:** Continuous Flow (Article → Next Verse).
+
+---
+
+## 3. IMMEDIATE EXECUTION QUEUE (Week 1)
+1.  **Project Init:** Set up Astro + Tailwind with the "Parchment" Palette.
+2.  **Typography:** Download and configure Local Fonts (Serif + Sans).
+3.  **Schema:** Write the Zod validation schema for the "Universal Verse" Frontmatter.**3. DATA SCHEMA: THE \"UNIVERSAL VERSE\"**\
 All canonical verse files must strictly adhere to this YAML Frontmatter
 schema.\
 **File Template:** src/content/{book}/chapter-{n}/verse-{m}.md\
